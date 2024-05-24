@@ -12,23 +12,15 @@ node {
              app.push("latest")
          }
      }
-     stage('Scan') {
-           // download report template
-           sh 'curl -sfL https://gist.githubusercontent.com/vjayajv/2fc83aaa80656f976bb39b447cad362d/raw/74a09bf76f8017001312daf65cb83f1b4f4e10d1/report.tmpl > report.tmpl'
-           
-           // Scan all vuln levels
-           sh 'mkdir -p reports'
-           sh 'ls -R .'
-           sh 'grype 127.0.0.1/admin/flask-example:latest -o template -t report.tmpl --file reports/grype.html'
-           
-           publishHTML target : [
-               allowMissing: true,
-               alwaysLinkToLastBuild: true,
-               keepAll: true,
-               reportDir: 'reports',
-               reportFiles: 'grype.html',
-               reportName: 'Grype Scan',
-               reportTitles: 'Grype Scan'
-           ]
-       }
+     stage('SonarQubeScanner') {
+         def scannerHome = tool 'SonarQubeScanner';
+         withSonarQubeEnv('SonarQubeScanner') {
+             sh """${scannerHome}/bin/sonar-scanner \
+                             -Dsonar.projectKey=demo-project \
+                             -Dsonar.sources=. \
+                             -Dsonar.host.url=http://10.0.2.15:9000 \
+                             -Dsonar.login=squ_d1b2b47f523810c04e8b4456fb1634ab4c7b791c
+             """
+        }
+     }
 }
