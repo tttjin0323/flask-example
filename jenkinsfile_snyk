@@ -20,7 +20,7 @@ node {
           monitorProjectOnBuild: false, // 모니터링 여부
           failOnIssues: false, // 취약성 발견시 빌드 실패로 할지여부(기본 값: true)  실패시에도 보고서는 생성됨
           // place other parameters here
-          additionalArguments: 'https://github.com/gasbugs/flask-example'
+          additionalArguments: 'https://github.com/tttjin0323/flask-example'
         )
     }
 }
